@@ -38,14 +38,22 @@ sudo apt install -y \
     docker-buildx-plugin \
     docker-compose-plugin
 
-echo "✅ Docker installation completed!"
+echo "🔧 Installing Docker Compose standalone (latest release)..."
+DOCKER_COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '"' -f 4)
+sudo curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" \
+    -o /usr/local/bin/docker-compose
 
-echo "🔎 Verifying Docker version:"
-docker --version
+sudo chmod +x /usr/local/bin/docker-compose
 
-echo "🚀 Running test container (hello-world)..."
+echo "✅ Docker Compose standalone version installed:"
+docker-compose --version
+
+echo ""
+echo "✅ All installations completed successfully!"
+
+echo "🚀 Testing Docker (hello-world)..."
 sudo docker run hello-world
 
 echo ""
-echo "👤 To run Docker without sudo, run the following command and relogin:"
-echo "    sudo usermod -aG docker \$USER && newgrp docker"
+echo "👤 To run Docker without sudo, run:"
+echo "     sudo usermod -aG docker \$USER && newgrp docker"
